@@ -1,0 +1,42 @@
+apply plugin: 'maven'
+
+configurations {
+    mavenWagons
+}
+
+dependencies {
+    mavenWagons 'org.springframework.build:aws-maven:5.0.0.RELEASE'
+}
+
+def isReleaseBuild() {
+    return getVersion().contains("SNAPSHOT") == false
+}
+
+
+def getDestUrl() {
+    if (isReleaseBuild()) {
+        return "s3://curb-maven/release"
+    } else {
+        return "s3://curb-maven/snapshot"
+    }
+}
+
+uploadArchives {
+
+    repositories.mavenDeployer {
+        configuration = configurations.mavenWagons
+        repository(url: getDestUrl())
+                {
+                    authentication(userName: AWS_ACCESS_KEY, password: AWS_SECRET_KEY)
+                }
+        pom.project {
+            groupId GROUP
+            artifactId getArtifactName()
+            version getVersion()
+            name POM_NAME
+            packaging POM_PACKAGING
+            description POM_DESCRIPTION
+        }
+    }
+}
+

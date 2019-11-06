@@ -1,0 +1,2 @@
+include ':app',':ispoolin'
+rootProject.name='IspoolinSample'
