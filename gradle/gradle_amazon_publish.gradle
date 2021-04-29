@@ -15,9 +15,9 @@ def isReleaseBuild() {
 
 def getDestUrl() {
     if (isReleaseBuild()) {
-        return "s3://curb-maven/release"
+        return OWN_MAVEN_SERVER_URL
     } else {
-        return "s3://curb-maven/snapshot"
+        return OWN_MAVEN_SERVER_URL
     }
 }
 
@@ -27,16 +27,15 @@ uploadArchives {
         configuration = configurations.mavenWagons
         repository(url: getDestUrl())
                 {
-                    authentication(userName: AWS_ACCESS_KEY, password: AWS_SECRET_KEY)
+                    authentication(userName: OWN_MAVEN_SERVER_LOGIN, password: OWN_MAVEN_SERVER_PASSWORD)
                 }
         pom.project {
             groupId GROUP
             artifactId getArtifactName()
             version getVersion()
             name POM_NAME
-            packaging POM_PACKAGING
+            packaging AAR_POM_PACKAGING
             description POM_DESCRIPTION
         }
     }
 }
-

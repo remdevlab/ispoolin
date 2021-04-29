@@ -34,7 +34,7 @@ compileTestKotlin {
     }
 }
 
-def getArtifactName() {
+static def getArtifactName() {
     return "ispoolin"
 }
 
