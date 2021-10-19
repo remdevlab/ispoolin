@@ -1,22 +1,28 @@
 package org.remdev.executor.task
 
-
 import org.remdev.executor.Ispoolin
 import java.util.*
 import java.util.logging.Level
 
-abstract class UseCase<Q : UseCase.RequestValues, P : UseCase.ResponseValue>
-    (val taskType: Int, val taskName: String, val createdTime: Long, val priority: TaskPriority) :
-    Comparable<UseCase<Q, P>> {
+abstract class UseCase<Q : UseCase.RequestValues, P : UseCase.ResponseValue>(
+    var requestValues: Q? = null,
+    val taskType: Int,
+    val taskName: String,
+    val createdTime: Long,
+    val priority: TaskPriority
+) : Comparable<UseCase<Q, P>> {
 
-    constructor(taskType: Int, taskName: String) : this(taskType, taskName, Date().time, TaskPriority.MIDDLE)
-
-    var requestValues: Q? = null
+    constructor(requestValues: Q? = null, taskType: Int, taskName: String) : this(
+        requestValues,
+        taskType,
+        taskName,
+        Date().time,
+        TaskPriority.MIDDLE
+    )
 
     var useCaseCallback: UseCaseCallback<P>? = null
 
-
-    fun run() {
+    suspend fun run() {
         if (validate(requestValues)) {
             invoke(requestValues)
         } else {
@@ -24,11 +30,11 @@ abstract class UseCase<Q : UseCase.RequestValues, P : UseCase.ResponseValue>
         }
     }
 
-    open fun validate(requestValues: Q?): Boolean {
+    open suspend fun validate(requestValues: Q?): Boolean {
         return true
     }
 
-    abstract fun invoke(requestValue: Q?)
+    abstract suspend fun invoke(requestValue: Q?)
 
     /**
      * Data passed to a request.
@@ -61,15 +67,16 @@ abstract class UseCase<Q : UseCase.RequestValues, P : UseCase.ResponseValue>
         }
 
         open fun onAny() {
-
         }
     }
 
-    data class ErrorData(val message: String, val code: Int) {
+    open class ErrorData(val message: String, val code: Int, val exception: Throwable? = null) {
         override fun toString(): String {
-            return "ErrorData(message='$message', code=$code)"
+            return "ErrorData(message='$message', code=$code, exception=$exception)"
         }
     }
+
+    internal class ExecutionError(message: String, exception: Throwable? = null) : ErrorData(message, Int.MAX_VALUE, exception)
 
     override fun compareTo(other: UseCase<Q, P>): Int {
         var result = other.priority.compareTo(priority)
@@ -82,5 +89,4 @@ abstract class UseCase<Q : UseCase.RequestValues, P : UseCase.ResponseValue>
     override fun toString(): String {
         return "Task(taskType='$taskType', taskName='$taskName', createdTime=$createdTime, taskPriority=$priority)"
     }
-
 }

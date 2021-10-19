@@ -1,0 +1,101 @@
+apply plugin: 'com.android.library'
+apply plugin: 'maven-publish'
+
+// Get GitHub user name
+def getGprUser() {
+    def ghUser = System.getenv("GITHUB_USER_NAME")
+    if (ghUser == null) {
+        ghUser = GITHUB_USER_NAME
+    }
+    return ghUser
+}
+
+// Get GitHub user Token
+def getGprToken() {
+    def ghToken = System.getenv("GITHUB_USER_KEY")
+    if (ghToken == null) {
+        ghToken = GITHUB_USER_KEY
+    }
+    return ghToken
+}
+
+afterEvaluate {
+
+    publishing {
+        // gpr url
+        def gprBaseUrl = "https://maven.pkg.github.com"
+        def gprRepoOwner = System.getenv("GIT_REPO_OWNER") ?: GIT_REPO_OWNER
+        def gprRepoId = System.getenv("GIT_REPO_NAME") ?: GIT_REPO_NAME
+
+        // gpr repository
+        repositories {
+            maven {
+                name = getArtifactName()
+                url = uri("$gprBaseUrl/$gprRepoOwner/$gprRepoId")
+                credentials {
+                    username = getGprUser()
+                    password = getGprToken()
+                }
+            }
+        }
+
+        // register publication tasks
+        publications {
+            //release(MavenPublication) {
+            // Applies the component for the release build variant.
+            //from components.release
+           /* register("release", MavenPublication) {*/
+     /*       android.libraryVariants.all { variant ->
+                if (variant.buildType.name == "release") {
+                    register("gprRelease", MavenPublication) {
+                        groupId = ARTIFACT_GROUP_ID
+                        artifactId = ARTIFACT_ID
+                        version = getVersion()
+                        artifact(variant.packageLibraryProvider.get().archivePath)
+                        pom.withXml {
+                            // add dependencies to pom
+                            def dependencies = asNode().appendNode("dependencies")
+                            configurations.implementation.allDependencies.each {
+                                if (it.group != null && it.name != "unspecified" && it.version != null && it.version != "unspecified") {
+                                    def dependencyNode = dependencies.appendNode("dependency")
+                                    dependencyNode.appendNode("groupId", it.group)
+                                    dependencyNode.appendNode("artifactId", it.name)
+                                    dependencyNode.appendNode("version", it.version)
+                                }
+                            }
+                        }
+                    }
+
+                }
+            }*/
+
+             android.libraryVariants.all { variant ->
+                 if (variant.buildType.name == "release") {
+                     register("gprRelease", MavenPublication) {
+                         groupId = ARTIFACT_GROUP_ID
+                         artifactId = ARTIFACT_ID
+                         version = getVersion()
+                         artifact(variant.packageLibraryProvider.get().archivePath)
+
+                         pom.withXml {
+                             // add dependencies to pom
+                             def dependencies = asNode().appendNode("dependencies")
+                             configurations.implementation.allDependencies.each {
+                                 if (it.group != null && it.name != "unspecified" && it.version != null && it.version != "unspecified") {
+                                     def dependencyNode = dependencies.appendNode("dependency")
+                                     dependencyNode.appendNode("groupId", it.group)
+                                     dependencyNode.appendNode("artifactId", it.name)
+                                     dependencyNode.appendNode("version", it.version)
+                                 }
+                             }
+                         }
+                     }
+                 }
+             }
+        }
+    }
+}
+
+/*publish {
+    dependsOn assemble
+}*/

@@ -4,25 +4,25 @@ import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.ObsoleteCoroutinesApi
 import kotlinx.coroutines.launch
-import kotlinx.coroutines.newFixedThreadPoolContext
-import kotlinx.coroutines.withContext
+import kotlinx.coroutines.newSingleThreadContext
 import org.remdev.executor.TaskScheduler
+import org.remdev.executor.internal.ConflateExecutor
+import org.remdev.executor.internal.impl.ConflateExecutorImpl
 import org.remdev.executor.task.UseCase
 
-class MultiThreadScheduler : TaskScheduler {
-    companion object {
-        const val POOL_SIZE = 2
-    }
+class ConflateScheduler : TaskScheduler {
+
+    private var executor: ConflateExecutor = ConflateExecutorImpl()
 
     @OptIn(ObsoleteCoroutinesApi::class)
-    private var context = newFixedThreadPoolContext(POOL_SIZE, "THREAD:ISPOOLIN:MultiThreadScheduler")
+    private var context = newSingleThreadContext("THREAD:ISPOOLIN:ConflateScheduler")
 
-    override suspend fun execute(action: suspend () -> Unit) = withContext(context) {
+    override suspend fun execute(action: suspend () -> Unit) = executor.conflate {
         action.invoke()
     }
 
     override suspend fun invoke(action: suspend () -> Unit): Job = CoroutineScope(context).launch {
-        action.invoke()
+        executor.conflate { action.invoke() }
     }
 
     override suspend fun <V : UseCase.ResponseValue> notifyResponse(

@@ -8,30 +8,17 @@ dependencies {
     mavenWagons 'org.springframework.build:aws-maven:5.0.0.RELEASE'
 }
 
-def isReleaseBuild() {
-    return getVersion().contains("SNAPSHOT") == false
-}
-
-
-def getDestUrl() {
-    if (isReleaseBuild()) {
-        return OWN_MAVEN_SERVER_URL
-    } else {
-        return OWN_MAVEN_SERVER_URL
-    }
-}
-
 uploadArchives {
 
     repositories.mavenDeployer {
         configuration = configurations.mavenWagons
-        repository(url: getDestUrl())
+        repository(url: OWN_MAVEN_SERVER_URL)
                 {
                     authentication(userName: OWN_MAVEN_SERVER_LOGIN, password: OWN_MAVEN_SERVER_PASSWORD)
                 }
         pom.project {
             groupId GROUP
-            artifactId getArtifactName()
+            artifactId getArtifactId()
             version getVersion()
             name POM_NAME
             packaging AAR_POM_PACKAGING

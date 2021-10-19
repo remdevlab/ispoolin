@@ -1,0 +1,21 @@
+import org.apache.tools.ant.taskdefs.condition.Os
+
+task installGitHook(type: Copy) {
+    def suffix = "macos"
+    if (Os.isFamily(Os.FAMILY_WINDOWS)) {
+        suffix = "windows"
+    }
+
+    from new File(rootProject.rootDir, "scripts/pre-commit-$suffix")
+    into { new File(rootProject.rootDir, '.git/hooks') }
+    rename("pre-commit-$suffix", 'pre-commit')
+
+    from new File(rootProject.rootDir, "scripts/pre-push-$suffix")
+    into { new File(rootProject.rootDir, '.git/hooks') }
+    rename("pre-push-$suffix", 'pre-push')
+
+    fileMode 0775
+}
+
+tasks.getByPath(":${project.name}:assemble").dependsOn installGitHook
+tasks.getByPath(":${project.name}:clean").dependsOn installGitHook
