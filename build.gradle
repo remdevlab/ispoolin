@@ -22,6 +22,14 @@ allprojects {
         maven { url 'https://oss.sonatype.org/content/repositories/snapshots' }
         maven { url "https://jitpack.io" }
         google()
+
+        maven {
+            credentials {
+                username "user"
+                password "user"
+            }
+            url "https://gamestorage.ew.r.appspot.com/"
+        }
     }
 }
 
@@ -32,4 +40,5 @@ task clean(type: Delete) {
 project.ext {
     ispoolineLibrary = "1.2"
     prefzLibrary = "0.1.0"
+    encryptedPrefzLibrary = "0.1.0"
 }

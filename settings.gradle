@@ -1,3 +1,4 @@
 include ':prefz'
 include ':app',':ispoolin'
 rootProject.name='IspoolinSample'
+include ':encryptedprefz'
