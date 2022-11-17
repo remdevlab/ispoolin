@@ -184,4 +184,9 @@ interface PrefsHelper {
      * Useful for unit tests
      */
     fun enableInMemoryMode()
+
+    /**
+     * Enable or disable logs on get / put operations
+     */
+    fun configure(writeLogsOnRead: Boolean = false, writeLogsOnWrite: Boolean = true)
 }

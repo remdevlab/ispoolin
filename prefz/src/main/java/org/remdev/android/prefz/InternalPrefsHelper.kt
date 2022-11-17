@@ -147,4 +147,7 @@ internal class InternalPrefsHelper : PrefsHelper {
 
     override fun enableInMemoryMode() {
     }
+
+    override fun configure(writeLogsOnRead: Boolean, writeLogsOnWrite: Boolean) {
+    }
 }

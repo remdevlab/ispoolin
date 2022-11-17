@@ -1,7 +1,7 @@
 package org.remdev.executor.task
 
 import org.remdev.executor.Ispoolin
-import java.util.*
+import java.util.Date
 import java.util.logging.Level
 
 abstract class UseCase<Q : UseCase.RequestValues, P : UseCase.ResponseValue>(
@@ -76,7 +76,8 @@ abstract class UseCase<Q : UseCase.RequestValues, P : UseCase.ResponseValue>(
         }
     }
 
-    internal class ExecutionError(message: String, exception: Throwable? = null) : ErrorData(message, Int.MAX_VALUE, exception)
+    internal class ExecutionError(message: String, exception: Throwable? = null) :
+        ErrorData(message, Int.MAX_VALUE, exception)
 
     override fun compareTo(other: UseCase<Q, P>): Int {
         var result = other.priority.compareTo(priority)

@@ -132,4 +132,9 @@ public class PrefsUtil implements PrefsHelper {
     public void enableInMemoryMode() {
         Prefz.INSTANCE.enableInMemoryMode();
     }
+
+    @Override
+    public void configure(boolean writeLogsOnRead, boolean writeLogsOnWrite) {
+        Prefz.INSTANCE.configure(writeLogsOnRead, writeLogsOnWrite);
+    }
 }
