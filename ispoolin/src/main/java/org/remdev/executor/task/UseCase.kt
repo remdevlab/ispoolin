@@ -4,25 +4,17 @@ import org.remdev.executor.Ispoolin
 import java.util.Date
 import java.util.logging.Level
 
-abstract class UseCase<Q : UseCase.RequestValues, P : UseCase.ResponseValue>(
-    var requestValues: Q? = null,
-    val taskType: Int,
-    val taskName: String,
-    val createdTime: Long,
-    val priority: TaskPriority
-) : Comparable<UseCase<Q, P>> {
+abstract class UseCase<Q : UseCase.RequestValues, P : UseCase.ResponseValue>
+(val taskType: Int, val taskName: String, val createdTime: Long, val priority: TaskPriority) :
+    Comparable<UseCase<Q, P>> {
 
-    constructor(requestValues: Q? = null, taskType: Int, taskName: String) : this(
-        requestValues,
-        taskType,
-        taskName,
-        Date().time,
-        TaskPriority.MIDDLE
-    )
+    constructor(taskType: Int, taskName: String) : this(taskType, taskName, Date().time, TaskPriority.MIDDLE)
+
+    var requestValues: Q? = null
 
     var useCaseCallback: UseCaseCallback<P>? = null
 
-    suspend fun run() {
+    fun run() {
         if (validate(requestValues)) {
             invoke(requestValues)
         } else {
@@ -30,11 +22,11 @@ abstract class UseCase<Q : UseCase.RequestValues, P : UseCase.ResponseValue>(
         }
     }
 
-    open suspend fun validate(requestValues: Q?): Boolean {
+    open fun validate(requestValues: Q?): Boolean {
         return true
     }
 
-    abstract suspend fun invoke(requestValue: Q?)
+    abstract fun invoke(requestValue: Q?)
 
     /**
      * Data passed to a request.
@@ -70,9 +62,9 @@ abstract class UseCase<Q : UseCase.RequestValues, P : UseCase.ResponseValue>(
         }
     }
 
-    open class ErrorData(val message: String, val code: Int, val exception: Throwable? = null) {
+    data class ErrorData(val message: String, val code: Int) {
         override fun toString(): String {
-            return "ErrorData(message='$message', code=$code, exception=$exception)"
+            return "ErrorData(message='$message', code=$code)"
         }
     }
 

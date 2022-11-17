@@ -1,41 +1,46 @@
 package org.remdev.executor.handler
 
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Job
-import kotlinx.coroutines.ObsoleteCoroutinesApi
-import kotlinx.coroutines.launch
-import kotlinx.coroutines.newFixedThreadPoolContext
-import kotlinx.coroutines.withContext
 import org.remdev.executor.TaskScheduler
 import org.remdev.executor.task.UseCase
+import java.util.concurrent.ArrayBlockingQueue
+import java.util.concurrent.ThreadPoolExecutor
+import java.util.concurrent.TimeUnit
 
 class MultiThreadScheduler : TaskScheduler {
     companion object {
         const val POOL_SIZE = 2
+
+        const val MAX_POOL_SIZE = 4
+
+        const val TIMEOUT = 30L
     }
 
-    @OptIn(ObsoleteCoroutinesApi::class)
-    private var context = newFixedThreadPoolContext(POOL_SIZE, "THREAD:ISPOOLIN:MultiThreadScheduler")
+    private var mThreadPoolExecutor: ThreadPoolExecutor
 
-    override suspend fun execute(action: suspend () -> Unit) = withContext(context) {
-        action.invoke()
+    init {
+        mThreadPoolExecutor = ThreadPoolExecutor(
+            POOL_SIZE, MAX_POOL_SIZE, TIMEOUT,
+            TimeUnit.SECONDS, ArrayBlockingQueue<Runnable>(POOL_SIZE)
+        )
     }
 
-    override suspend fun invoke(action: suspend () -> Unit): Job = CoroutineScope(context).launch {
-        action.invoke()
+    override fun execute(runnable: Runnable) {
+        mThreadPoolExecutor.execute(runnable)
     }
 
-    override suspend fun <V : UseCase.ResponseValue> notifyResponse(
+    override fun <V : UseCase.ResponseValue> notifyResponse(
         response: V,
         useCaseCallback: UseCase.UseCaseCallback<V>
     ) {
+        // mHandler.post { useCaseCallback.onSuccess(response) }
         useCaseCallback.onSuccess(response)
     }
 
-    override suspend fun <V : UseCase.ResponseValue> onError(
+    override fun <V : UseCase.ResponseValue> onError(
         error: UseCase.ErrorData,
         useCaseCallback: UseCase.UseCaseCallback<V>
     ) {
+        // mHandler.post { useCaseCallback.onError(error) }
         useCaseCallback.onError(error)
     }
 }

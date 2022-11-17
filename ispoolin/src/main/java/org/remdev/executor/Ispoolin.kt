@@ -1,6 +1,5 @@
 package org.remdev.executor
 
-import org.remdev.executor.handler.MultiThreadScheduler
 import org.remdev.executor.handler.SingleThreadScheduler
 import org.remdev.executor.handler.ThisThreadScheduler
 import java.util.logging.Logger
@@ -8,7 +7,7 @@ import java.util.logging.Logger
 class Ispoolin {
 
     var single: TaskHandler = TaskHandler.getInstance(SingleThreadScheduler())
-    var multi: TaskHandler = TaskHandler.getInstance(MultiThreadScheduler())
+    var multi: TaskHandler = TaskHandler.getInstance(SingleThreadScheduler())
     var ui: TaskHandler = TaskHandler.getInstance(SingleThreadScheduler())
     var current: TaskHandler = TaskHandler.getInstance(ThisThreadScheduler())
 

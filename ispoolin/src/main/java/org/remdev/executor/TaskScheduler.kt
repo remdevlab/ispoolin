@@ -1,8 +1,17 @@
 package org.remdev.executor
 
-import kotlinx.coroutines.Job
+import org.remdev.executor.task.UseCase
 
-interface TaskScheduler : TaskNotifier {
-    suspend fun execute(action: suspend () -> Unit)
-    suspend fun invoke(action: suspend () -> Unit): Job
+interface TaskScheduler {
+    fun execute(runnable: Runnable)
+
+    fun <V : UseCase.ResponseValue> notifyResponse(
+        response: V,
+        useCaseCallback: UseCase.UseCaseCallback<V>
+    )
+
+    fun <V : UseCase.ResponseValue> onError(
+        error: UseCase.ErrorData,
+        useCaseCallback: UseCase.UseCaseCallback<V>
+    )
 }
