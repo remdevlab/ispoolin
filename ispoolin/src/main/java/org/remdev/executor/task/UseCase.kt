@@ -62,9 +62,9 @@ abstract class UseCase<Q : UseCase.RequestValues, P : UseCase.ResponseValue>
         }
     }
 
-    data class ErrorData(val message: String, val code: Int) {
+    data class ErrorData(val message: String, val code: Int, val throwable: Throwable? = null) {
         override fun toString(): String {
-            return "ErrorData(message='$message', code=$code)"
+            return "ErrorData(message='$message', code=$code, throwable=$throwable)"
         }
     }
 

@@ -32,6 +32,6 @@ task clean(type: Delete) {
 }
 
 project.ext {
-    ispoolineLibrary = "1.2.1"
+    ispoolineLibrary = "1.2.2"
     prefzLibrary = "0.1.6"
 }
