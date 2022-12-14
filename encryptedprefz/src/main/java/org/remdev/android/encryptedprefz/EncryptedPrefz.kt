@@ -7,6 +7,7 @@ import androidx.security.crypto.EncryptedSharedPreferences
 import androidx.security.crypto.MasterKeys
 import org.remdev.android.prefz.InternalLogger
 import org.remdev.android.prefz.PrefsHelper
+import java.math.BigDecimal
 
 object EncryptedPrefz : PrefsHelper {
 
@@ -99,6 +100,20 @@ object EncryptedPrefz : PrefsHelper {
         return value
     }
 
+    override fun putBigDecimal(key: String, value: BigDecimal) {
+        putString(key, value.toString())
+    }
+
+    override fun getBigDecimal(key: String, defValue: BigDecimal): BigDecimal {
+        var value = defValue
+        try {
+            value = getString(key, defValue = defValue.toString()).toBigDecimal()
+        } catch (ex: NumberFormatException) {
+            InternalLogger.logException(ex.toString(), ex)
+        }
+        return value
+    }
+
     override fun getAllPrefs(): Map<String, Any> {
         return emptyMap()
     }
@@ -110,6 +125,14 @@ object EncryptedPrefz : PrefsHelper {
     @SuppressLint("ApplySharedPref")
     override fun cleanAllPrefs() {
         mSharedPreferences.edit().clear().commit()
+    }
+
+    override fun enableInMemoryMode() {
+        throw IllegalStateException("EncryptedPrefz doesn't support in memory mode")
+    }
+
+    override fun configure(writeLogsOnRead: Boolean, writeLogsOnWrite: Boolean) {
+        throw IllegalStateException("EncryptedPrefz doesn't log data")
     }
 
 }

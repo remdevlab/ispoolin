@@ -4,8 +4,8 @@ import android.annotation.SuppressLint
 import android.content.Context
 import android.content.SharedPreferences
 import java.math.BigDecimal
-import java.util.HashMap
 
+@SuppressLint("ApplySharedPref")
 internal class InternalPrefsHelper : PrefsHelper {
 
     private lateinit var mSharedPreferences: SharedPreferences
@@ -20,13 +20,13 @@ internal class InternalPrefsHelper : PrefsHelper {
     override fun clearValue(key: String) {
         val editor = mSharedPreferences.edit()
         editor.remove(key)
-        editor.apply()
+        editor.commit()
     }
 
     override fun putString(key: String, value: String) {
         val editor = mSharedPreferences.edit()
         editor.putString(key, value)
-        editor.apply()
+        editor.commit()
     }
 
     override fun getString(key: String): String {
@@ -45,7 +45,7 @@ internal class InternalPrefsHelper : PrefsHelper {
     override fun putInt(key: String, value: Int) {
         val editor = mSharedPreferences.edit()
         editor.putInt(key, value)
-        editor.apply()
+        editor.commit()
     }
 
     override fun getInt(key: String): Int {
@@ -59,7 +59,7 @@ internal class InternalPrefsHelper : PrefsHelper {
     override fun putLong(key: String, value: Long) {
         val editor = mSharedPreferences.edit()
         editor.putLong(key, value)
-        editor.apply()
+        editor.commit()
     }
 
     override fun getLong(key: String, defValue: Long): Long {
@@ -69,7 +69,7 @@ internal class InternalPrefsHelper : PrefsHelper {
     override fun putBoolean(key: String, value: Boolean) {
         val editor = mSharedPreferences.edit()
         editor.putBoolean(key, value)
-        editor.apply()
+        editor.commit()
     }
 
     override fun getBoolean(key: String): Boolean {
@@ -83,7 +83,7 @@ internal class InternalPrefsHelper : PrefsHelper {
     override fun putFloat(key: String, value: Float) {
         val editor = mSharedPreferences.edit()
         editor.putFloat(key, value)
-        editor.apply()
+        editor.commit()
     }
 
     override fun getFloat(key: String, defValue: Float): Float {
@@ -93,7 +93,7 @@ internal class InternalPrefsHelper : PrefsHelper {
     override fun putDouble(key: String, value: Double) {
         val editor = mSharedPreferences.edit()
         editor.putString(key, value.toString())
-        editor.apply()
+        editor.commit()
     }
 
     override fun getDouble(key: String, defValue: Double): Double {
@@ -109,7 +109,7 @@ internal class InternalPrefsHelper : PrefsHelper {
     override fun putBigDecimal(key: String, value: BigDecimal) {
         val editor = mSharedPreferences.edit()
         editor.putString(key, value.toString())
-        editor.apply()
+        editor.commit()
     }
 
     override fun getBigDecimal(key: String, defValue: BigDecimal): BigDecimal {
