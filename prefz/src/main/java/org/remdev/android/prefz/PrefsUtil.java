@@ -1,9 +1,8 @@
 package org.remdev.android.prefz;
 
-import android.annotation.SuppressLint;
-
 import org.jetbrains.annotations.NotNull;
 
+import java.math.BigDecimal;
 import java.util.Map;
 
 import kotlin.Deprecated;
@@ -103,6 +102,16 @@ public class PrefsUtil implements PrefsHelper {
         return Prefz.INSTANCE.getDouble(key, defValue);
     }
 
+    @Override
+    public void putBigDecimal(@NotNull String key, @NotNull BigDecimal value) {
+        Prefz.INSTANCE.putBigDecimal(key, value);
+    }
+
+    @Override
+    public BigDecimal getBigDecimal(@NotNull String key, @NotNull BigDecimal defValue) {
+        return Prefz.INSTANCE.getBigDecimal(key, defValue);
+    }
+
     @NotNull
     public Map<String, Object> getAllPrefs() {
         return Prefz.INSTANCE.getAllPrefs();
@@ -112,8 +121,17 @@ public class PrefsUtil implements PrefsHelper {
         Prefz.INSTANCE.flushToLogsAllPrefs();
     }
 
-    @SuppressLint("ApplySharedPref")
     public void cleanAllPrefs() {
         Prefz.INSTANCE.cleanAllPrefs();
+    }
+
+    @Override
+    public void enableInMemoryMode() {
+        Prefz.INSTANCE.enableInMemoryMode();
+    }
+
+    @Override
+    public void configure(boolean writeLogsOnRead, boolean writeLogsOnWrite) {
+        Prefz.INSTANCE.configure(writeLogsOnRead, writeLogsOnWrite);
     }
 }

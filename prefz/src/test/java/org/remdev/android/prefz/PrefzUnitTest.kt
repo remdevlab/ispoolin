@@ -1,8 +1,6 @@
 package org.remdev.android.prefz
 
-import androidx.test.ext.junit.runners.AndroidJUnit4
 import org.junit.Test
-import org.junit.runner.RunWith
 import java.math.BigDecimal
 import java.util.Date
 
@@ -11,8 +9,7 @@ import java.util.Date
  *
  * See [testing documentation](http://d.android.com/tools/testing).
  */
-@RunWith(AndroidJUnit4::class)
-class PrefzTest {
+class PrefzUnitTest {
 
     @Test
     fun test_string() {
@@ -78,17 +75,6 @@ class PrefzTest {
         assert(value == Prefz.getDouble(KEY, 123.321))
         Prefz.clearValue(KEY)
         assert(Prefz.getDouble(KEY, 7.1) == 7.1)
-    }
-
-    @Test
-    fun test_big_decimal() {
-        val value = BigDecimal("20.001")
-        Prefz.clearValue(KEY)
-        assert(value == Prefz.getBigDecimal(KEY, value))
-        Prefz.putBigDecimal(KEY, value)
-        assert(value == Prefz.getBigDecimal(KEY, BigDecimal.valueOf(123.321)))
-        Prefz.clearValue(KEY)
-        assert(Prefz.getBigDecimal(KEY, BigDecimal.valueOf(7.1)) == BigDecimal.valueOf(7.1))
     }
 
     @Test

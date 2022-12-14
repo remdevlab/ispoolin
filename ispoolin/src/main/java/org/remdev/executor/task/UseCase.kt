@@ -1,12 +1,11 @@
 package org.remdev.executor.task
 
-
 import org.remdev.executor.Ispoolin
-import java.util.*
+import java.util.Date
 import java.util.logging.Level
 
 abstract class UseCase<Q : UseCase.RequestValues, P : UseCase.ResponseValue>
-    (val taskType: Int, val taskName: String, val createdTime: Long, val priority: TaskPriority) :
+(val taskType: Int, val taskName: String, val createdTime: Long, val priority: TaskPriority) :
     Comparable<UseCase<Q, P>> {
 
     constructor(taskType: Int, taskName: String) : this(taskType, taskName, Date().time, TaskPriority.MIDDLE)
@@ -14,7 +13,6 @@ abstract class UseCase<Q : UseCase.RequestValues, P : UseCase.ResponseValue>
     var requestValues: Q? = null
 
     var useCaseCallback: UseCaseCallback<P>? = null
-
 
     fun run() {
         if (validate(requestValues)) {
@@ -61,7 +59,6 @@ abstract class UseCase<Q : UseCase.RequestValues, P : UseCase.ResponseValue>
         }
 
         open fun onAny() {
-
         }
     }
 
@@ -82,5 +79,4 @@ abstract class UseCase<Q : UseCase.RequestValues, P : UseCase.ResponseValue>
     override fun toString(): String {
         return "Task(taskType='$taskType', taskName='$taskName', createdTime=$createdTime, taskPriority=$priority)"
     }
-
 }

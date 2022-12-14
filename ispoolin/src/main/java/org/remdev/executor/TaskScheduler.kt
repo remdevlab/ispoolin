@@ -2,7 +2,6 @@ package org.remdev.executor
 
 import org.remdev.executor.task.UseCase
 
-
 interface TaskScheduler {
     fun execute(runnable: Runnable)
 

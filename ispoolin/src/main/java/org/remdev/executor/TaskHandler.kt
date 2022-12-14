@@ -3,24 +3,27 @@ package org.remdev.executor
 import org.remdev.executor.task.UseCase
 import java.util.logging.Level
 
-
 class TaskHandler(private val mUseCaseScheduler: TaskScheduler) {
 
     fun <T : UseCase.RequestValues, R : UseCase.ResponseValue> execute(
-        useCase: UseCase<T, R>, values: T, callback: UseCase.UseCaseCallback<R>
+        useCase: UseCase<T, R>,
+        values: T,
+        callback: UseCase.UseCaseCallback<R>
     ) {
         useCase.requestValues = values
         useCase.useCaseCallback = UiCallbackWrapper(callback, this)
 
-        mUseCaseScheduler.execute(Runnable {
-            Ispoolin.logger.log(Level.INFO, "Start executing task : ${useCase.taskName}")
-            try {
-                useCase.run()
-            } catch (e: Throwable) {
-                Ispoolin.logger.log(Level.INFO, e.toString(), e)
+        mUseCaseScheduler.execute(
+            Runnable {
+                Ispoolin.logger.log(Level.INFO, "Start executing task : ${useCase.taskName}")
+                try {
+                    useCase.run()
+                } catch (e: Throwable) {
+                    Ispoolin.logger.log(Level.INFO, e.toString(), e)
+                }
+                Ispoolin.logger.log(Level.INFO, "Finish executing task : ${useCase.taskName}")
             }
-            Ispoolin.logger.log(Level.INFO, "Finish executing task : ${useCase.taskName}")
-        })
+        )
     }
 
     fun <V : UseCase.ResponseValue> notifyResponse(response: V, useCaseCallback: UseCase.UseCaseCallback<V>) {

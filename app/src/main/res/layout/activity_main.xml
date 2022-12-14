@@ -20,7 +20,6 @@
         android:paddingTop="67dp"
         android:text="Test text"
         android:textColor="@color/colorAccent"
-        android:textSize="19.2sp"
-        android:drawableTop="@drawable/rt_btn" />
+        android:textSize="19.2sp" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

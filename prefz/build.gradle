@@ -2,9 +2,10 @@ plugins {
     id 'com.android.library'
     id 'kotlin-android'
 }
-
 setVersion(project.prefzLibrary)
+setGroup(ARTIFACT_GROUP_ID)
 apply from: rootProject.file('gradle/gradle_amazon_publish.gradle')
+apply from: rootProject.file('hooks.gradle')
 
 android {
     compileSdkVersion 30
@@ -27,11 +28,11 @@ android {
         }
     }
     compileOptions {
-        sourceCompatibility JavaVersion.VERSION_1_8
-        targetCompatibility JavaVersion.VERSION_1_8
+        sourceCompatibility JavaVersion.VERSION_11
+        targetCompatibility JavaVersion.VERSION_11
     }
     kotlinOptions {
-        jvmTarget = '1.8'
+        jvmTarget = '11'
     }
     sourceSets {
         main {
@@ -46,20 +47,17 @@ android {
 
 dependencies {
     implementation "org.jetbrains.kotlin:kotlin-stdlib:$kotlin_version"
-    implementation 'androidx.appcompat:appcompat:1.2.0'
-    androidTestImplementation 'androidx.test.ext:junit:1.1.2'
-    androidTestImplementation 'androidx.test.espresso:espresso-core:3.3.0'
+    implementation 'androidx.appcompat:appcompat:1.3.1'
+    testImplementation 'junit:junit:4.13.2'
+    androidTestImplementation 'androidx.test.ext:junit:1.1.3'
+    androidTestImplementation 'androidx.test.espresso:espresso-core:3.4.0'
+    implementation 'org.slf4j:slf4j-api:1.7.30'
 }
 
-task androidSourcesJar(type: Jar) {
-    classifier = 'sources'
-    from android.sourceSets.main.java.sourceFiles
-}
-
-artifacts {
-    archives androidSourcesJar
-}
-
-def getArtifactName() {
+static def getArtifactId() {
     return "prefz"
+}
+
+def getArtifactGroupId(){
+    return ARTIFACT_GROUP_ID
 }

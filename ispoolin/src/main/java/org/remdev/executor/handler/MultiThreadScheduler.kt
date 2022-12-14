@@ -6,7 +6,6 @@ import java.util.concurrent.ArrayBlockingQueue
 import java.util.concurrent.ThreadPoolExecutor
 import java.util.concurrent.TimeUnit
 
-
 class MultiThreadScheduler : TaskScheduler {
     companion object {
         const val POOL_SIZE = 2
@@ -15,7 +14,6 @@ class MultiThreadScheduler : TaskScheduler {
 
         const val TIMEOUT = 30L
     }
-
 
     private var mThreadPoolExecutor: ThreadPoolExecutor
 
@@ -34,7 +32,7 @@ class MultiThreadScheduler : TaskScheduler {
         response: V,
         useCaseCallback: UseCase.UseCaseCallback<V>
     ) {
-        //mHandler.post { useCaseCallback.onSuccess(response) }
+        // mHandler.post { useCaseCallback.onSuccess(response) }
         useCaseCallback.onSuccess(response)
     }
 
@@ -42,7 +40,7 @@ class MultiThreadScheduler : TaskScheduler {
         error: UseCase.ErrorData,
         useCaseCallback: UseCase.UseCaseCallback<V>
     ) {
-        //mHandler.post { useCaseCallback.onError(error) }
+        // mHandler.post { useCaseCallback.onError(error) }
         useCaseCallback.onError(error)
     }
 }
