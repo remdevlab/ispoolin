@@ -1,13 +1,10 @@
 package org.remdev.executor.handler
 
-import org.remdev.executor.Ispoolin
 import org.remdev.executor.TaskScheduler
 import org.remdev.executor.task.UseCase
 import java.util.concurrent.LinkedBlockingQueue
 import java.util.concurrent.ThreadPoolExecutor
 import java.util.concurrent.TimeUnit
-import java.util.logging.Level
-import kotlin.concurrent.thread
 
 class SingleThreadScheduler : TaskScheduler {
     companion object {
@@ -28,12 +25,6 @@ class SingleThreadScheduler : TaskScheduler {
             TIMEOUT, TimeUnit.MILLISECONDS,
             LinkedBlockingQueue()
         )
-        thread {
-            while (!Thread.interrupted()) {
-                Ispoolin.logger.log(Level.INFO, mThreadPoolExecutor.toString())
-                Thread.sleep(20 * 1000)
-            }
-        }
     }
 
     override fun execute(runnable: Runnable) {

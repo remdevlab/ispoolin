@@ -1,7 +1,7 @@
 apply plugin: 'java-library'
 apply plugin: 'kotlin'
 setVersion(project.ispoolineLibrary)
-apply from: rootProject.file('gradle/gradle-github-aar-push.gradle')
+apply from: rootProject.file('gradle/gradle_amazon_publish.gradle')
 apply from: rootProject.file('hooks.gradle')
 
 dependencies {
@@ -16,8 +16,8 @@ dependencies {
     testImplementation 'org.jetbrains.kotlinx:kotlinx-coroutines-test:1.5.1'
 }
 
-sourceCompatibility = "8"
-targetCompatibility = "8"
+sourceCompatibility = "11"
+targetCompatibility = "11"
 buildscript {
     ext.kotlin_version = '1.5.20'
     repositories {
@@ -32,12 +32,12 @@ repositories {
 }
 compileKotlin {
     kotlinOptions {
-        jvmTarget = "1.8"
+        jvmTarget = "11"
     }
 }
 compileTestKotlin {
     kotlinOptions {
-        jvmTarget = "1.8"
+        jvmTarget = "11"
     }
 }
 

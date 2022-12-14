@@ -68,9 +68,6 @@ abstract class UseCase<Q : UseCase.RequestValues, P : UseCase.ResponseValue>
         }
     }
 
-    internal class ExecutionError(message: String, exception: Throwable? = null) :
-        ErrorData(message, Int.MAX_VALUE, exception)
-
     override fun compareTo(other: UseCase<Q, P>): Int {
         var result = other.priority.compareTo(priority)
         if (result == 0) {

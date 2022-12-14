@@ -1,7 +1,5 @@
 package org.remdev.android.prefz;
 
-import android.annotation.SuppressLint;
-
 import org.jetbrains.annotations.NotNull;
 
 import java.math.BigDecimal;
@@ -123,7 +121,6 @@ public class PrefsUtil implements PrefsHelper {
         Prefz.INSTANCE.flushToLogsAllPrefs();
     }
 
-    @SuppressLint("ApplySharedPref")
     public void cleanAllPrefs() {
         Prefz.INSTANCE.cleanAllPrefs();
     }
