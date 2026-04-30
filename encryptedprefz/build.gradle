@@ -4,8 +4,6 @@ plugins {
 }
 setVersion(project.encryptedPrefzLibrary)
 setGroup(ARTIFACT_GROUP_ID)
-apply from: rootProject.file('gradle/gradle_amazon_publish.gradle')
-apply from: rootProject.file('hooks.gradle')
 
 android {
     compileSdkVersion 31

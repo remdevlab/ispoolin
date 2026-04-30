@@ -1,7 +1,6 @@
 package org.remdev.android.prefz
 
 import android.util.Log
-import org.slf4j.LoggerFactory
 
 object InternalLogger {
     const val TAG = "PREFZ"
@@ -36,19 +35,7 @@ object InternalLogger {
         fun logException(msg: String, ex: Throwable)
     }
 
-    class BaseLogger : PrefzLogger {
-        private val logger = LoggerFactory.getLogger(TAG)
-        override fun log(msg: String) {
-            logger.info(msg)
-        }
-
-        override fun logException(msg: String, ex: Throwable) {
-            logger.error(msg, ex)
-        }
-    }
-
     class AndroidLogger : PrefzLogger {
-
         override fun log(msg: String) {
             Log.i(TAG, msg)
         }
@@ -59,7 +46,6 @@ object InternalLogger {
     }
 
     class SystemLogger : PrefzLogger {
-
         override fun log(msg: String) {
             println("$TAG: $msg")
         }
